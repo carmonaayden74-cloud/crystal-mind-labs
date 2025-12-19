@@ -173,9 +173,38 @@
       h1 { font-size: 2.3rem; }
       h2 { font-size: 1.8rem; }
     }
+  
+    /* Rayos cayendo tipo energía */
+    .lightning {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bolt {
+      position: absolute;
+      top: -120px;
+      width: 2px;
+      height: 120px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(0,229,255,0.9), rgba(255,255,255,0));
+      filter: blur(0.5px) drop-shadow(0 0 12px rgba(0,229,255,0.9));
+      animation: fall linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(120vh); }
+    }
+      to { transform: translateY(25%); }
+    }
+
   </style>
 </head>
 <body>
+
+  <div class="lightning" id="lightning"></div>
 
   <div class="bg-glow one"></div>
   <div class="bg-glow two"></div>
@@ -263,6 +292,19 @@
       });
     }
 
+    // Rayos cayendo dinámicos
+    const lightning = document.getElementById('lightning');
+    const bolts = 25; // cantidad de rayos
+
+    for (let i = 0; i < bolts; i++) {
+      const b = document.createElement('div');
+      b.className = 'bolt';
+      b.style.left = Math.random() * 100 + 'vw';
+      b.style.animationDuration = 1.5 + Math.random() * 2 + 's';
+      b.style.animationDelay = Math.random() * 3 + 's';
+      lightning.appendChild(b);
+    }
+
     // Compartir página (funciona en TODO: PC, Android, iPhone)
     function sharePage() {
       const url = window.location.href;
@@ -296,5 +338,6 @@
   </script>
 </body>
 </html>
+
 
 
