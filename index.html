@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crystal Mind Labs</title>
+  <title>Rose Nails HR</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,6 +15,7 @@
       overflow-x: hidden;
     }
 
+    /* Fondo animado */
     .bg-glow {
       position: fixed;
       width: 500px;
@@ -48,7 +49,6 @@
       padding: 48px 32px;
       box-shadow: 0 30px 60px rgba(0,0,0,0.6);
       animation: fadeUp 1s ease;
-      text-align: center;
     }
 
     @keyframes fadeUp {
@@ -63,6 +63,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: glowText 3s infinite alternate;
+      text-align: center;
     }
 
     h2 {
@@ -83,6 +84,7 @@
       text-align: center;
     }
 
+    /* Servicios */
     .services {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -103,10 +105,31 @@
       box-shadow: 0 25px 45px rgba(0,229,255,0.45);
     }
 
+    /* Galería */
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
+    }
+
+    .gallery div {
+      height: 160px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #00e5ff, #00bcd4);
+      opacity: 0.85;
+      animation: pulse 3s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+
+    /* Testimonios */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
     }
 
     .testimonial {
@@ -116,6 +139,7 @@
       font-style: italic;
     }
 
+    /* Botón WhatsApp */
     .cta {
       text-align: center;
       margin-top: 40px;
@@ -130,6 +154,12 @@
       color: #002b36;
       font-weight: bold;
       cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cta button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 25px 45px rgba(0,229,255,0.6);
     }
 
     footer {
@@ -137,6 +167,11 @@
       padding: 40px 20px;
       font-size: 0.8rem;
       opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.3rem; }
+      h2 { font-size: 1.8rem; }
     }
   </style>
 </head>
@@ -148,17 +183,45 @@
   <section>
     <div class="card">
       <h1>Crystal Mind Labs</h1>
-      <p>Soluciones digitales modernas, rápidas y profesionales.</p>
+      <p>Soluciones digitales modernas, rápidas y profesionales. Todo conectado directo a WhatsApp.</p>
     </div>
   </section>
 
   <section>
     <h2>Servicios</h2>
     <div class="services">
-      <div class="service" onclick="sendWhatsApp('Landing Page')">🚀 Landing Page</div>
-      <div class="service" onclick="sendWhatsApp('Branding y Logo')">🎨 Branding</div>
-      <div class="service" onclick="sendWhatsApp('Automatización')">⚙️ Automatización</div>
-      <div class="service" onclick="sendWhatsApp('Web completa')">🌐 Web completa</div>
+      <div class="service" onclick="sendWhatsApp('Landing Page profesional')">🚀 Landing Page profesional<br><small>Desde $99</small></div>
+      <div class="service" onclick="sendWhatsApp('Branding y logo')">🎨 Branding y logo<br><small>Desde $49</small></div>
+      <div class="service" onclick="sendWhatsApp('Automatización de procesos')">⚙️ Automatización<br><small>Cotización</small></div>
+      <div class="service" onclick="sendWhatsApp('Diseño web completo')">🌐 Diseño web completo<br><small>Desde $199</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Trabajos recientes</h2>
+    <p>Subí fotos o videos de tus proyectos (vista previa local).</p>
+
+    <div class="cta" style="margin-bottom:20px">
+      <input type="file" id="upload" accept="image/*,video/*" multiple />
+    </div>
+
+    <div class="gallery" id="gallery"></div>
+
+    <div class="cta">
+      <button onclick="sharePage()">📤 Compartir esta página</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Clientes dicen</h2>
+    <div class="testimonials">
+      <div class="testimonial">“Rápidos, modernos y muy profesionales.”</div>
+      <div class="testimonial">“Mi negocio empezó a recibir mensajes el mismo día.”</div>
+      <div class="testimonial">“Diseño futurista que sí vende.”</div>
+    </div>
+
+    <div class="cta">
+      <button onclick="sendWhatsApp('Consulta general')">Hablar por WhatsApp</button>
     </div>
   </section>
 
@@ -167,10 +230,70 @@
   <script>
     function sendWhatsApp(servicio) {
       const phone = '50689630962';
-      const msg = `Hola, estoy interesado en ${servicio}`;
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+      const message = `Hola, estoy interesado en: ${servicio}`;
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    // Subir y mostrar fotos / videos (preview local)
+    const upload = document.getElementById('upload');
+    const gallery = document.getElementById('gallery');
+
+    if (upload) {
+      upload.addEventListener('change', () => {
+        gallery.innerHTML = '';
+        [...upload.files].forEach(file => {
+          const url = URL.createObjectURL(file);
+          let el;
+
+          if (file.type.startsWith('video')) {
+            el = document.createElement('video');
+            el.src = url;
+            el.controls = true;
+          } else {
+            el = document.createElement('img');
+            el.src = url;
+          }
+
+          el.style.width = '100%';
+          el.style.borderRadius = '18px';
+          el.style.boxShadow = '0 20px 40px rgba(0,229,255,0.4)';
+          gallery.appendChild(el);
+        });
+      });
+    }
+
+    // Compartir página (funciona en TODO: PC, Android, iPhone)
+    function sharePage() {
+      const url = window.location.href;
+
+      // Intento 1: compartir nativo (móviles)
+      if (navigator.share) {
+        navigator.share({
+          title: 'Crystal Mind Labs',
+          text: 'Mira esta página de servicios digitales',
+          url: url
+        }).catch(() => fallbackShare(url));
+      } else {
+        fallbackShare(url);
+      }
+    }
+
+    // Fallback universal
+    function fallbackShare(url) {
+      // Copiar enlace
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        alert('✅ Enlace copiado. Pégalo en WhatsApp, Instagram o donde quieras');
+      } else {
+        prompt('Copia este enlace:', url);
+      }
+
+      // Abrir WhatsApp Web como extra
+      const wa = `https://wa.me/?text=${encodeURIComponent(url)}`;
+      window.open(wa, '_blank');
     }
   </script>
-
 </body>
 </html>
+
